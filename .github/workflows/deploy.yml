@@ -1,0 +1,32 @@
+name: Deploy Demo Page
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 소스 가져오기
+        uses: actions/checkout@v4
+
+      - name: Pages 설정
+        uses: actions/configure-pages@v5
+
+      - name: 웹페이지 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: 웹페이지 배포
+        id: deployment
+        uses: actions/deploy-pages@v5
